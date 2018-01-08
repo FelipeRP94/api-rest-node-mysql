@@ -1,11 +1,12 @@
 const parser = require('./user.parser');
+const userQueries = require('./user.queries');
 
 const userController = (connection) => {
     
     const handleError = (err, res) => res.status(500).send(err);
 
     const getUsers = (req, res) => {
-        connection.query('SELECT * FROM usuarios', (error, rows) => {
+        connection.query(userQueries.getAllUsers, (error, rows) => {
 
             if (error) handleError(error, res);
             else res.json(200, rows);            
@@ -13,7 +14,7 @@ const userController = (connection) => {
     }
 
     const postUser = (req, res) => {
-        connection.query('INSERT INTO usuarios (nombre, apellidos, email, password, telefono, direccion, dni) VALUES (?,?,?,?,?,?,?)', Object.values(req.body), (error, result) => {
+        connection.query(userQueries.insertUser, Object.values(req.body), (error, result) => {
 
             if (error){
                 handleError(error, res);
@@ -29,7 +30,7 @@ const userController = (connection) => {
 
         const user = parser.bodyParser(req);
 
-        connection.query('UPDATE usuarios SET nombre = ?, apellidos = ?, email = ?, password = ?, telefono = ?, dni = ?, direccion = ? where id = ?', [user.nombre, user.apellidos, user.email, user.password, user.telefono, user.dni, user.direccion, req.params.userId], (error, result) => {
+        connection.query(userQueries.updateUser, [user.nombre, user.apellidos, user.email, user.password, user.telefono, user.dni, user.direccion, req.params.userId], (error, result) => {
             
             if (error){
                 handleError(error, res);
@@ -43,7 +44,7 @@ const userController = (connection) => {
 
     const deleteUser = (req, res) => {
 
-        connection.query('DELETE FROM usuarios WHERE id = ?', [req.params.userId], (error, result) => {
+        connection.query(userQueries.deleteUser, [req.params.userId], (error, result) => {
             
             if (error){
                 handleError(error, res);
