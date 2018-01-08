@@ -14,16 +14,3 @@ exports.bodyParser = (req) => {
     
     return user;
 }
-
-const copy = (source, destination) => {
-    for(const key in source){
-        if(source.hasOwnProperty(key) && !source['_id']){
-            destination[key] = source[key];
-        }
-    }
-}
-
-exports.patchParser = (req) => {
-    copy(req.body, req.user);
-    return req;
-}

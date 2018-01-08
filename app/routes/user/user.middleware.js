@@ -1,6 +1,8 @@
+const userQueries = require('./user.queries');
+
 exports.loadUserById = (connection) => (req, res, next) => {
 
-    connection.query('select * from usuarios where id = ?', [req.params.userId], (error, user) => {
+    connection.query(userQueries.getUserById, [req.params.userId], (error, user) => {
 
         if(error){
             res.status(500).send(error);
