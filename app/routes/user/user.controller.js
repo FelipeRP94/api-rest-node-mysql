@@ -1,5 +1,6 @@
 const parser = require('./user.parser');
 const userQueries = require('./user.queries');
+const validator = require('./user.validator').userValidator;
 
 const userController = (connection) => {
     
@@ -14,32 +15,41 @@ const userController = (connection) => {
     }
 
     const postUser = (req, res) => {
-        connection.query(userQueries.insertUser, Object.values(req.body), (error, result) => {
 
-            if (error){
-                handleError(error, res);
-            } else if (result && result.insertId){
-                res.json(200, result);
-            } else {
-                res.status(500, 'error al insertar el usuario');
-            }
-        });
+        if (validator(req, res)){
+
+            connection.query(userQueries.insertUser, Object.values(req.body), (error, result) => {
+
+                if (error){
+                    handleError(error, res);
+                } else if (result && result.insertId){
+                    res.json(200, result);
+                } else {
+                    res.status(500, 'error al insertar el usuario');
+                }
+            });
+
+        }
     }
 
     const putUser = (req, res) => {
 
-        const user = parser.bodyParser(req);
+        if (validator(req, res)){
 
-        connection.query(userQueries.updateUser, [user.nombre, user.apellidos, user.email, user.password, user.telefono, user.dni, user.direccion, req.params.userId], (error, result) => {
-            
-            if (error){
-                handleError(error, res);
-            } else if (result){
-                res.json(200, result);
-            } else {
-                res.status(500, 'error al actualizar el usuario');
-            }
-        });
+            const user = parser.bodyParser(req);
+
+            connection.query(userQueries.updateUser, [user.nombre, user.apellidos, user.email, user.password, user.telefono, user.dni, user.direccion, req.params.userId], (error, result) => {
+                
+                if (error){
+                    handleError(error, res);
+                } else if (result){
+                    res.json(200, result);
+                } else {
+                    res.status(500, 'error al actualizar el usuario');
+                }
+            });
+
+        }
     }
 
     const deleteUser = (req, res) => {
