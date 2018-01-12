@@ -1,8 +1,8 @@
-const tratamientosQueries = require('./tratamientos.queries');
+const tratamientoQueries = require('./tratamiento.queries');
 
 exports.loadTratamientoById = (connection) => (req, res, next) => {
 
-    connection.query(tratamientosQueries.getTratamientoById, [req.params.tratamientoId], (error, tratamiento) => {
+    connection.query(tratamientoQueries.getTratamientoById, [req.params.tratamientoId], (error, tratamiento) => {
 
         if(error){
             res.status(500).send(error);

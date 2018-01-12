@@ -61,7 +61,7 @@ const userController = (connection) => {
             } else if (result){
                 res.json(200, result);
             } else {
-                res.status(500, 'error al actualizar el usuario');
+                res.status(500, 'error al eliminar el usuario');
             }
         });
 

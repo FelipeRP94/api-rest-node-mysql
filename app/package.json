@@ -12,7 +12,6 @@
     "body-parser": "^1.18.2",
     "data": "file:../data",
     "express": "^4.16.2",
-    "express-session": "^1.15.6",
     "mysql": "^2.15.0"
   },
   "devDependencies": {

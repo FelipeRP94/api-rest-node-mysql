@@ -1,14 +1,14 @@
-const parser = require('./tratamientos.parser');
-const tratamientosQueries = require('./tratamientos.queries');
-const validator = require('./tratamientos.validator').tratamientoValidator;
+const parser = require('./tratamiento.parser');
+const tratamientoQueries = require('./tratamiento.queries');
+const validator = require('./tratamiento.validator').tratamientoValidator;
 
-const tratamientosController = (connection) => {
+const tratamientoController = (connection) => {
 
     const handleError = (err, res) => res.status(500).send(err);
 
     const getTratamientos = (req, res) => {
 
-        connection.query(tratamientosQueries.getAllTratamientos, (error, rows) => {
+        connection.query(tratamientoQueries.getAllTratamientos, (error, rows) => {
             if(error) handleError(error, res);
             else  res.status(200).json(rows);;
         });
@@ -18,7 +18,7 @@ const tratamientosController = (connection) => {
 
         if (validator(req, res)) {
 
-            connection.query(tratamientosQueries.insertTratamiento, Object.values(req.body), (error, result) => {
+            connection.query(tratamientoQueries.insertTratamiento, Object.values(req.body), (error, result) => {
 
                 if (error){
                     handleError(error, res);
@@ -37,7 +37,7 @@ const tratamientosController = (connection) => {
 
             const tratamiento = parser.bodyParser(req);
 
-            connection.query(tratamientosQueries.updateTratamiento, [tratamiento.nombre, tratamiento.descripcion, tratamiento.duracion, req.params.tratamientoId], (error, result) => {
+            connection.query(tratamientoQueries.updateTratamiento, [tratamiento.nombre, tratamiento.descripcion, tratamiento.duracion, req.params.tratamientoId], (error, result) => {
                 if (error){
                     handleError(error, res);
                 } else if (result){
@@ -52,14 +52,14 @@ const tratamientosController = (connection) => {
 
     const deleteTratamiento = (req, res) => {
 
-        connection.query(tratamientosQueries.deleteTratamiento, [req.params.tratamientoId], (error, result) => {
+        connection.query(tratamientoQueries.deleteTratamiento, [req.params.tratamientoId], (error, result) => {
 
             if (error){
                 handleError(error, res);
             } else if (result){
                 res.status(200).json(result);
             } else {
-                res.status(500, 'error al actualizar el usuario');
+                res.status(500, 'error al eliminar el tratamiento');
             }
         });
     }
@@ -72,4 +72,4 @@ const tratamientosController = (connection) => {
     }
 }
 
-module.exports = tratamientosController;
+module.exports = tratamientoController;
